@@ -134,9 +134,12 @@ function Lynx:dispatch(req: net.ServeRequest): net.ServeResponse
 end
 
 function Lynx:serve(port: number?)
-	self.server = net.serve(port or 3000, function(req)
-		return self:dispatch(req)
-	end)
+	self.server = net.serve(port or 3000, {
+		address = "0.0.0.0",
+		handleRequest = function(req)
+			return self:dispatch(req)
+		end,
+	})
 	return self
 end
 
